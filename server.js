@@ -22,39 +22,41 @@ function sendMessageToTrain(message) {
   }
 
   // Função para enviar mensagem para o respond.py
-  function sendMessageToRespond(message, callback) {
+  function sendMessageToRespond(message, res) {
+    let responseSent = false;
     const respondProcess = spawn('python3', ['respond.py', message]);
   
     respondProcess.stdout.on('data', (data) => {
-      // Aqui você precisa lidar com a resposta do respond.py e passá-la para o callback
-      callback(data.toString());
+      if (!responseSent) {
+        responseSent = true;
+        res.json({ response: data.toString() });
+      }
     });
   
     respondProcess.stderr.on('data', (data) => {
       console.error(`Erro na resposta: ${data}`);
       
-      // Aqui você pode adicionar lógica para lidar com erros específicos
       if (data.toString().includes("Key '")) {
-        const word = data.toString().split("'")[1];  // Extrair a palavra que causou o erro
+        const word = data.toString().split("'")[1];
         console.error(`A palavra '${word}' não foi encontrada no vocabulário do modelo.`);
+      }
+  
+      if (!responseSent) {
+        responseSent = true;
+        res.status(500).json({ error: data.toString() });
       }
     });
   }
   
+  
   app.post('/message', (req, res) => {
     const userMessage = req.body.message;
-    const trainMode = req.body.trainMode;  // Obter o estado da caixa de seleção
-
-    // Verificar se o modo de treinamento está ativado
+    const trainMode = req.body.trainMode;
+  
     if (trainMode) {
-      // Enviar a mensagem para o train.py
       sendMessageToTrain(userMessage);
     } else {
-      // Enviar a mensagem para o respond.py e obter a resposta do bot
-      sendMessageToRespond(userMessage, (botResponse) => {
-        // Enviar a resposta do bot ao usuário
-        res.json({ response: botResponse });
-      });
+      sendMessageToRespond(userMessage, res);
     }
 });
 

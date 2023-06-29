@@ -1,27 +1,50 @@
+from keras.preprocessing.text import tokenizer_from_json
+from keras.preprocessing.text import Tokenizer
+from keras.models import load_model
+from keras_preprocessing.sequence import pad_sequences
+import numpy as np
 import sys
 import json
-from gensim.models import Word2Vec
+import io
 
-# Carregar o modelo Word2Vec
-model = Word2Vec.load("word2vec.model")
+# Função para gerar uma frase
+def generate_sentence(model, tokenizer, seed_text, max_length):
+    # Inicializar a frase gerada com o texto semente
+    generated = seed_text
+
+    # Gerar 10 palavras
+    for _ in range(10):
+        # Codificar o texto como uma sequência de números
+        encoded = tokenizer.texts_to_sequences([generated])[0]
+        # Preencher a sequência para que tenha o mesmo comprimento que as sequências de treinamento
+        encoded = pad_sequences([encoded], maxlen=max_length, padding='pre')
+
+        # Prever a próxima palavra
+        probabilities = model.predict(encoded, verbose=0)[0]
+        predicted_word_index = np.argmax(probabilities)
+
+        # Procurar a palavra prevista no dicionário do tokenizer
+        for word, index in tokenizer.word_index.items():
+            if index == predicted_word_index:
+                generated += ' ' + word
+                break
+
+    return generated
+
+# Carregar o modelo e o tokenizer
+model = load_model('lstm_model.h5')
+with open('tokenizer.json', 'r') as f:
+    data = json.load(f)
+    tokenizer = tokenizer_from_json(data)
 
 # Obter a mensagem do usuário como argumento
-user_message = sys.argv[1]
+seed_text = sys.argv[1]
 
-# Dividir a mensagem do usuário em palavras
-user_words = user_message.split()
+# Definir o comprimento máximo da frase
+max_length = 411
 
-try:
-    # Tentar codificar a mensagem do usuário como um vetor
-    user_vector = sum(model.wv[word] for word in user_words) / len(user_words)
-except KeyError as e:
-    # Se uma palavra não for encontrada, buscar a palavra mais semelhante
-    missing_word = str(e).split("'")[1]  # Extrair a palavra que causou o erro
-    most_similar_word = model.wv.most_similar(positive=[missing_word], topn=1)[0][0]
-    print(f"A palavra '{missing_word}' não foi encontrada, a palavra mais similar é '{most_similar_word}'.")
+# Gerar uma frase
+sentence = generate_sentence(model, tokenizer, seed_text, max_length)
 
-# Encontrar a palavra mais semelhante ao vetor da mensagem do usuário
-most_similar_word = model.wv.most_similar([user_vector], topn=1)[0][0]
-
-# Imprimir a palavra mais semelhante
-print(most_similar_word)
+# Imprimir a frase
+print(sentence)
