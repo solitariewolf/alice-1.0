@@ -21,7 +21,9 @@ def generate_sentence(model, tokenizer, seed_text, max_length):
 
         # Prever a próxima palavra
         probabilities = model.predict(encoded, verbose=0)[0]
-        predicted_word_index = np.argmax(probabilities)
+
+        # Selecionar a próxima palavra com base na distribuição de probabilidade
+        predicted_word_index = np.random.choice(range(len(probabilities)), p=probabilities)
 
         # Procurar a palavra prevista no dicionário do tokenizer
         for word, index in tokenizer.word_index.items():
