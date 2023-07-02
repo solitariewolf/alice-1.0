@@ -18,25 +18,16 @@ O script server.js é o servidor principal que lida com as solicitações HTTP. 
 Como usar
 Certifique-se de ter o Python 3 e as bibliotecas necessárias instaladas (consulte requirements.txt).
 Execute o script codific.py para treinar o modelo inicial do chatbot:
-Copy code
+```
 python3 codific.py
+```
 Inicie o servidor:
-Copy code
+```
 node server.js
+```
 Acesse o chatbot através do navegador usando o endereço http://localhost:5000.
 Digite uma mensagem no chat e aguarde a resposta do chatbot.
-Personalização do Modo de Resposta
-Para personalizar o modo de resposta do chatbot entre "modo preciso" e "modo menos preciso", siga estas etapas:
 
-Modifique o arquivo server.js e adicione uma rota adicional no servidor para receber o modo de resposta:
-javascript
-```
-app.post('/mode', (req, res) => {
-  const responseMode = req.body.mode;
-  // Salve o modo de resposta em uma variável global ou arquivo
-  res.json({ message: 'Modo de resposta atualizado com sucesso.' });
-});
-```
 Atualize o arquivo respond.py para usar o modo de resposta personalizado ao gerar a resposta.
 Contribuição
 Sinta-se à vontade para contribuir com este projeto abrindo problemas ou enviando pull requests. Sua contribuição é bem-vinda!
