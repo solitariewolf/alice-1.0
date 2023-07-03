@@ -43,7 +43,7 @@ with open('tokenizer.json', 'r') as f:
 seed_text = sys.argv[1]
 
 # Definir o comprimento máximo da frase
-max_length = 411
+max_length = 2722
 
 # Gerar uma frase
 sentence = generate_sentence(model, tokenizer, seed_text, max_length)

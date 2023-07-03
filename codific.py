@@ -9,7 +9,7 @@ import json
 import io
 
 # Carregar as mensagens
-with open('messages.json', 'r') as file:
+with open('pdf.json', 'r') as file:
     messages = json.load(file)
 
 # Preparar o Tokenizer
