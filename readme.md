@@ -32,4 +32,4 @@ Licença 📜
 Este projeto está licenciado sob a Licença MIT. Consulte o arquivo LICENSE para obter mais detalhes.
 
 Importante ❗
-Este chatbot está em fase de treinamento e contém algumas palavras já incluídas em seu treinamento. No entanto, é importante ressaltar que não nos responsabilizamos pelo uso indevido do chatbot. Recomendamos que ele seja utilizado apenas para fins educacionais 🎓. Além disso, todo o conteúdo utilizado para treinar o chatbot deve ser devidamente licenciado e respeitar os direitos autorais. ⚠️
+Este chatbot está em fase de treinamento e contém algumas palavras já incluídas em seu treinamento. No entanto, é importante ressaltar que não nos responsabilizamos pelo uso indevido do chatbot. Recomendamos que ele seja utilizado apenas para fins educacionais 🎓. Além disso, todo o conteúdo utilizado para treinar o chatbot deve ser devidamente licenciado e respeitar os direitos autorais.. ⚠️
